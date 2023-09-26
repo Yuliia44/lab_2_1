@@ -1,0 +1,125 @@
+using System;
+
+class Triangle
+{
+    private double a, b, c;
+
+    public Triangle()
+    {
+        a = b = c = 0;
+    }
+
+    public double A
+    {
+        get { return a; }
+        set
+        {
+            if (value > 0)
+                a = value;
+            else
+                Console.WriteLine("Сторона 'a' пивинна бути додатньою.");
+        }
+    }
+
+    public double B
+    {
+        get { return b; }
+        set
+        {
+            if (value > 0)
+                b = value;
+            else
+                Console.WriteLine("Сторона 'b' повинна бути додатньою.");
+        }
+    }
+
+    public double C
+    {
+        get { return c; }
+        set
+        {
+            if (value > 0)
+                c = value;
+            else
+                Console.WriteLine("Сторона 'c' повинна бути додатньою.");
+        }
+    }
+
+    public bool Correct()
+    {
+        return a + b > c && a + c > b && b + c > a;
+    }
+
+    public double[] Corners()
+    {
+        double[] angles = new double[3];
+
+        if (Correct())
+        {
+            angles[0] = Math.Acos((b * b + c * c - a * a) / (2 * b * c)) * (180.0 / Math.PI);
+            angles[1] = Math.Acos((a * a + c * c - b * b) / (2 * a * c)) * (180.0 / Math.PI);
+            angles[2] = 180 - angles[0] - angles[1];
+        }
+        else
+        {
+            Console.WriteLine("Трикутник із заданими сторонами не існує.");
+        }
+
+        return angles;
+    }
+
+    public double Perimeter()
+    {
+        return a + b + c;
+    }
+
+    public void Print()
+    {
+        Console.WriteLine($"Сторона 'a': {a}");
+        Console.WriteLine($"Сторона 'b': {b}");
+        Console.WriteLine($"Сторона 'c': {c}");
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Console.OutputEncoding = System.Text.Encoding.UTF8;
+        try
+        {
+            Triangle triangle = new Triangle();
+
+            Console.Write("Введіть значення сторони 'a': ");
+            triangle.A = double.Parse(Console.ReadLine());
+
+            Console.Write("Введіть значення сторони 'b': ");
+            triangle.B = double.Parse(Console.ReadLine());
+
+            Console.Write("Введіть значення сторони 'c': ");
+            triangle.C = double.Parse(Console.ReadLine());
+
+            Console.WriteLine("\nВведені значення сторін трикутника:");
+            triangle.Print();
+
+            if (triangle.Correct())
+            {
+                Console.WriteLine("\nТрикутник існує.");
+                Console.WriteLine($"Периметр: {triangle.Perimeter()}");
+                double[] angles = triangle.Corners();
+                Console.WriteLine($"Кути:");
+                Console.WriteLine($"Кут 'A': {angles[0]}");
+                Console.WriteLine($"Кут 'B': {angles[1]}");
+                Console.WriteLine($"Кут 'C': {angles[2]}");
+            }
+            else
+            {
+                Console.WriteLine("\nТрикутник із заданими сторонами не існує.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Помилка: {ex.Message}");
+        }
+    }
+}
